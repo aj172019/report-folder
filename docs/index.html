@@ -1111,17 +1111,9 @@ body {
   margin-top: 40px;
   position: relative;
 }
-/* Horizontal connector line behind phase cards */
+/* Horizontal connector line — disabled */
 .roadmap-grid::before {
-  content: '';
-  position: absolute;
-  top: 28px;
-  left: 10%;
-  right: 10%;
-  height: 3px;
-  background: linear-gradient(90deg, var(--navy-400), var(--blue-500), var(--gold));
-  border-radius: 2px;
-  z-index: 0;
+  display: none;
 }
 .roadmap-card {
   background: rgba(255,255,255,0.06);
