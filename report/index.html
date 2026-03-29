@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agentic 프로세스 도입 성과 보고서</title>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy-900: #0F172A;
+  --navy-800: #1E293B;
+  --navy-700: #334155;
+  --navy-600: #475569;
+  --navy-400: #94A3B8;
+  --navy-200: #E2E8F0;
+  --navy-100: #F1F5F9;
+  --navy-50:  #F8FAFC;
+
+  --blue-600: #2563EB;
+  --blue-500: #3B82F6;
+  --blue-100: #DBEAFE;
+  --blue-50:  #EFF6FF;
+
+  --green-600: #059669;
+  --green-500: #10B981;
+  --green-100: #D1FAE5;
+
+  --red-500: #EF4444;
+  --red-100: #FEE2E2;
+  --red-50:  #FEF2F2;
+
+  --amber-500: #F59E0B;
+  --amber-100: #FEF3C7;
+
+  --white: #FFFFFF;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  color: var(--navy-800);
+  line-height: 1.6;
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+}
+
+/* ===== Navigation ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--navy-200);
+  padding: 0 48px;
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 56px;
+  overflow-x: auto;
+}
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--navy-600);
+  text-decoration: none;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.nav-link:hover { color: var(--navy-900); background: var(--navy-100); }
+.nav-link.active {
+  color: var(--blue-600);
+  background: var(--blue-50);
+  font-weight: 600;
+}
+
+/* ===== Section Base ===== */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 48px;
+}
+.section-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--blue-600);
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--navy-900);
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+.section-desc {
+  font-size: 17px;
+  color: var(--navy-600);
+  max-width: 680px;
+  line-height: 1.7;
+}
+.divider {
+  border: none;
+  border-top: 1px solid var(--navy-200);
+  margin: 0 48px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===== Cover ===== */
+.cover {
+  background: linear-gradient(135deg, var(--navy-900) 0%, #1a2744 100%);
+  color: var(--white);
+  padding: 120px 48px 100px;
+  position: relative;
+  overflow: hidden;
+}
+.cover::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.cover-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+.cover-label {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blue-500);
+  margin-bottom: 24px;
+  padding: 6px 14px;
+  border: 1px solid rgba(59,130,246,0.3);
+  border-radius: 4px;
+}
+.cover-title {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 20px;
+  max-width: 800px;
+  word-break: keep-all;
+}
+.cover-subtitle {
+  font-size: 20px;
+  color: var(--navy-400);
+  margin-bottom: 48px;
+  max-width: 600px;
+  line-height: 1.6;
+}
+.cover-meta {
+  display: flex;
+  gap: 32px;
+  font-size: 14px;
+  color: var(--navy-400);
+}
+.cover-meta span { display: flex; align-items: center; gap: 6px; }
+
+/* ===== Cards ===== */
+.card {
+  background: var(--white);
+  border: 1px solid var(--navy-200);
+  border-radius: 12px;
+  padding: 28px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+
+/* Pain Card */
+.pain-card {
+  border-left: 4px solid var(--red-500);
+  background: var(--red-50);
+}
+.pain-card .pain-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--red-100);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+.pain-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy-900);
+  margin-bottom: 8px;
+}
+.pain-card p {
+  font-size: 14px;
+  color: var(--navy-700);
+  line-height: 1.6;
+}
+
+/* Feature Card */
+.feature-card {
+  border-top: 3px solid var(--blue-600);
+}
+.feature-card .feature-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--blue-100);
+  color: var(--blue-600);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.feature-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--navy-900);
+  margin-bottom: 8px;
+}
+.feature-card p {
+  font-size: 14px;
+  color: var(--navy-700);
+  line-height: 1.65;
+}
+
+/* Impact Card */
+.impact-card {
+  text-align: center;
+  border-top: 4px solid var(--green-500);
+  padding: 32px 24px;
+}
+.impact-number {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--blue-600);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.impact-unit {
+  font-size: 18px;
+  color: var(--navy-700);
+  font-weight: 500;
+}
+.impact-label {
+  font-size: 14px;
+  color: var(--navy-600);
+  margin-top: 8px;
+}
+
+/* ===== Timeline ===== */
+.timeline {
+  position: relative;
+  padding-left: 48px;
+  margin-top: 48px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--navy-200);
+}
+.timeline-item {
+  position: relative;
+  padding-bottom: 48px;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-marker {
+  position: absolute;
+  left: -48px;
+  top: 4px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+}
+.timeline-marker.phase-1 { background: var(--navy-400); }
+.timeline-marker.phase-2 { background: var(--amber-500); }
+.timeline-marker.phase-3 { background: var(--green-500); }
+
+.timeline-content {
+  background: var(--white);
+  border: 1px solid var(--navy-200);
+  border-radius: 12px;
+  padding: 24px;
+}
+.timeline-content.active {
+  border-color: var(--green-500);
+  background: #f0fdf4;
+}
+.timeline-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+.tag-discontinued { background: var(--navy-200); color: var(--navy-700); }
+.tag-limited { background: var(--amber-100); color: #92400E; }
+.tag-current { background: var(--green-100); color: #065F46; }
+
+.timeline-content h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy-900);
+  margin-bottom: 8px;
+}
+.timeline-content p {
+  font-size: 14px;
+  color: var(--navy-700);
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+.timeline-insight {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--navy-100);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--navy-700);
+  line-height: 1.5;
+}
+.timeline-content.active .timeline-insight {
+  background: var(--green-100);
+  color: #065F46;
+}
+
+/* ===== Architecture Diagram ===== */
+.arch-diagram {
+  margin: 48px 0;
+  padding: 40px;
+  background: var(--navy-50);
+  border-radius: 16px;
+  border: 1px solid var(--navy-200);
+}
+.arch-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.arch-node {
+  padding: 16px 24px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 140px;
+}
+.arch-node.user {
+  background: var(--navy-800);
+  color: var(--white);
+}
+.arch-node.ai {
+  background: var(--blue-600);
+  color: var(--white);
+  min-width: 200px;
+}
+.arch-node.ai small {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.8;
+  margin-top: 4px;
+}
+.arch-node.data {
+  background: var(--green-100);
+  color: #065F46;
+  border: 1px solid var(--green-500);
+}
+.arch-node.output {
+  background: var(--amber-100);
+  color: #92400E;
+  border: 1px solid var(--amber-500);
+}
+.arch-arrow {
+  font-size: 24px;
+  color: var(--navy-400);
+}
+
+.agent-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 24px;
+}
+.agent-badge {
+  text-align: center;
+  padding: 12px 8px;
+  background: var(--white);
+  border: 1px solid var(--navy-200);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--navy-700);
+}
+.agent-badge .agent-icon {
+  display: block;
+  font-size: 11px;
+  color: var(--blue-600);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* ===== Screenshot Gallery ===== */
+.gallery {
+  margin-top: 48px;
+}
+.gallery-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  background: var(--navy-100);
+  padding: 4px;
+  border-radius: 10px;
+  width: fit-content;
+}
+.gallery-tab {
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--navy-600);
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.gallery-tab:hover { color: var(--navy-900); }
+.gallery-tab.active {
+  background: var(--white);
+  color: var(--navy-900);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
+}
+.gallery-image {
+  display: none;
+  border-radius: 12px;
+  border: 1px solid var(--navy-200);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.gallery-image.active { display: block; }
+.gallery-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.gallery-caption {
+  padding: 16px 20px;
+  background: var(--navy-50);
+  font-size: 13px;
+  color: var(--navy-600);
+  border-top: 1px solid var(--navy-200);
+}
+
+/* ===== Comparison Table ===== */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 32px;
+  font-size: 14px;
+}
+.compare-table thead th {
+  padding: 14px 20px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.compare-table thead th:first-child { color: var(--navy-700); }
+.compare-table thead th:nth-child(2) {
+  color: var(--red-500);
+  background: var(--red-50);
+  border-radius: 8px 8px 0 0;
+}
+.compare-table thead th:nth-child(3) {
+  color: var(--green-600);
+  background: #f0fdf4;
+  border-radius: 8px 8px 0 0;
+}
+.compare-table tbody td {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--navy-200);
+  color: var(--navy-700);
+}
+.compare-table tbody td:first-child {
+  font-weight: 600;
+  color: var(--navy-900);
+}
+.compare-table tbody td:nth-child(2) { background: var(--red-50); }
+.compare-table tbody td:nth-child(3) { background: #f0fdf4; }
+.compare-table tbody tr:last-child td { border-bottom: none; }
+
+.improve-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--green-100);
+  color: #065F46;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+/* ===== Insight Section ===== */
+.insight-block {
+  background: linear-gradient(135deg, var(--navy-900) 0%, #1a2744 100%);
+  color: var(--white);
+  padding: 80px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.insight-block::before {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(16,185,129,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.insight-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+.insight-quote {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.5;
+  max-width: 800px;
+  margin-bottom: 48px;
+  color: var(--navy-200);
+}
+.insight-quote em {
+  color: var(--white);
+  font-style: normal;
+  border-bottom: 2px solid var(--blue-500);
+}
+.expansion-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.expansion-card {
+  padding: 24px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+}
+.expansion-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.expansion-card p {
+  font-size: 14px;
+  color: var(--navy-400);
+  line-height: 1.6;
+}
+
+/* ===== Footer ===== */
+.footer {
+  padding: 32px 48px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--navy-400);
+  border-top: 1px solid var(--navy-200);
+}
+
+/* ===== Animations ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .cover { padding: 80px 24px 60px; }
+  .cover-title { font-size: 32px; }
+  .section { padding: 60px 24px; }
+  .nav { padding: 0 16px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .agent-grid { grid-template-columns: repeat(3, 1fr); }
+  .expansion-cards { grid-template-columns: 1fr; }
+  .arch-flow { flex-direction: column; }
+  .arch-arrow { transform: rotate(90deg); }
+  .cover-meta { flex-direction: column; gap: 8px; }
+  .insight-block { padding: 60px 24px; }
+  .insight-quote { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#cover" class="nav-link active">개요</a>
+    <a href="#problem" class="nav-link">문제 인식</a>
+    <a href="#journey" class="nav-link">탐색의 여정</a>
+    <a href="#solution" class="nav-link">AI Agentic 프로세스</a>
+    <a href="#impact" class="nav-link">정량적 성과</a>
+    <a href="#insight" class="nav-link">시사점</a>
+  </div>
+</nav>
+
+<!-- ============================================ -->
+<!-- SECTION 1: Cover -->
+<!-- ============================================ -->
+<section id="cover" class="cover">
+  <div class="cover-inner">
+    <span class="cover-label">Performance Report</span>
+    <h1 class="cover-title">AI Agentic 프로세스 도입을 통한 프로젝트 관리 혁신</h1>
+    <p class="cover-subtitle">문제 인식에서 해결까지 — 프로젝트 관리 프로세스의 구조적 전환 사례와 그 정량적 성과를 보고합니다.</p>
+    <div class="cover-meta">
+      <span>작성: 안준헌</span>
+      <span>일자: 2026. 03. 28</span>
+      <span>대상: 프로젝트 관리 프로세스</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 2: Problem -->
+<!-- ============================================ -->
+<section id="problem" class="section">
+  <span class="section-label">Problem Statement</span>
+  <h2 class="section-title reveal">기존 프로세스에서 반복적으로 발견된 구조적 한계</h2>
+  <p class="section-desc reveal">프로젝트 관리 도구를 사용하면서 겪은 문제들은 개별 도구의 기능 부족이 아니라, 도구 운영 방식 자체의 구조적 비효율이었습니다.</p>
+
+  <div class="grid-3" style="margin-top: 40px;">
+    <div class="card pain-card reveal reveal-delay-1">
+      <div class="pain-icon">$</div>
+      <h3>도구 비용과 복잡도의 불균형</h3>
+      <p>Jira, Confluence 등 엔터프라이즈 도구는 인당 월 $7.75 이상의 라이선스 비용이 발생합니다. 10명 기준 연간 약 $930 이상이며, 이에 더해 관리자의 설정 및 유지보수 공수가 지속적으로 요구됩니다.</p>
+    </div>
+    <div class="card pain-card reveal reveal-delay-2">
+      <div class="pain-icon">&#9201;</div>
+      <h3>수동 현행화의 반복</h3>
+      <p>Excel 기반 WBS는 매일 수동으로 상태를 갱신해야 합니다. 담당자별 진척 현황 수집, 공수 입력, 일정 변경 반영에 회당 30분 이상이 소요되며, 데이터는 갱신 시점 기준으로 항상 지연됩니다.</p>
+    </div>
+    <div class="card pain-card reveal reveal-delay-3">
+      <div class="pain-icon">&#128196;</div>
+      <h3>데이터 산재와 보고 부담</h3>
+      <p>WBS는 Excel, 진행 현황은 Jira, 커뮤니케이션은 메일/메신저에 분산됩니다. 주간/월간 보고를 위해 데이터를 수집·가공·시각화하는 별도 수작업이 반복적으로 발생합니다.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============================================ -->
+<!-- SECTION 3: Journey -->
+<!-- ============================================ -->
+<section id="journey" class="section">
+  <span class="section-label">Journey</span>
+  <h2 class="section-title reveal">문제 해결을 위한 탐색 과정</h2>
+  <p class="section-desc reveal">하나의 도구에 정착하지 않고, 각 단계에서의 한계를 인식하고 다음 단계로 발전시킨 과정입니다.</p>
+
+  <div class="timeline">
+    <!-- Phase 1 -->
+    <div class="timeline-item reveal">
+      <div class="timeline-marker phase-1">1</div>
+      <div class="timeline-content">
+        <span class="timeline-tag tag-discontinued">전환 완료</span>
+        <h3>Jira + Confluence 도입</h3>
+        <p>프로젝트 초기 체계적인 이슈 트래킹을 위해 Jira를 도입했습니다. 스프린트 보드, 백로그 관리, 보고 기능을 활용했으나, 운영 과정에서 한계가 드러났습니다.</p>
+        <div class="timeline-insight">
+          <strong>인사이트:</strong>&nbsp;WBS 수준의 세밀한 태스크 관리에는 Jira의 구조가 과도하게 복잡했고, 라이선스 비용 대비 실제 활용도가 낮았습니다. 커스터마이징에도 상당한 관리 공수가 요구되었습니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="timeline-item reveal">
+      <div class="timeline-marker phase-2">2</div>
+      <div class="timeline-content">
+        <span class="timeline-tag tag-limited">한계 확인</span>
+        <h3>Excel + Google Sheets 기반 관리</h3>
+        <p>Jira 라이선스 비용 부담으로 인해 Excel 기반으로 전환했습니다. WBS 표 작성, 간트 차트 생성, 공수 산정 등을 수동으로 운영했습니다.</p>
+        <div class="timeline-insight">
+          <strong>인사이트:</strong>&nbsp;비용 문제는 해결되었으나, 데이터 현행화가 전적으로 수작업에 의존하는 구조였습니다. 상태 변경, 일정 조정, 보고서 생성 모두 수동이며, 버전 관리가 불가능했습니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="timeline-item reveal">
+      <div class="timeline-marker phase-3">3</div>
+      <div class="timeline-content active">
+        <span class="timeline-tag tag-current">현재 운영 중</span>
+        <h3>AI Agentic 프로세스 전환</h3>
+        <p>반복적인 수작업의 본질적 원인은 "사람이 도구에 데이터를 맞추는 구조"에 있다고 판단했습니다. 이를 역전시켜 자연어 명령으로 데이터를 관리하고, 시각화와 보고가 자동으로 이루어지는 구조를 설계했습니다.</p>
+        <div class="timeline-insight">
+          <strong>인사이트:</strong>&nbsp;AI Agent에게 명확한 역할과 규칙을 부여하면, 프로젝트 관리의 반복 업무를 구조적으로 자동화할 수 있습니다. 도구 제작이 아니라, 문제 해결 경로를 직접 설계한 것이 핵심입니다.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============================================ -->
+<!-- SECTION 4: Solution -->
+<!-- ============================================ -->
+<section id="solution" class="section">
+  <span class="section-label">Solution</span>
+  <h2 class="section-title reveal">AI Agentic 프로세스 구조</h2>
+  <p class="section-desc reveal">자연어 명령 하나로 데이터 수정, 규칙 적용, 시각화, 외부 시스템 동기화까지 일관된 파이프라인으로 처리됩니다.</p>
+
+  <!-- Architecture -->
+  <div class="arch-diagram reveal">
+    <div class="arch-flow">
+      <div class="arch-node user">PL (자연어 명령)</div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-node ai">Claude AI<small>멀티 에이전트 시스템</small></div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-node data">WBS 데이터<small style="font-size:11px; font-weight:400;">JSON + Git 버전 관리</small></div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-node output">시각화 + Sheets 동기화</div>
+    </div>
+
+    <div class="agent-grid" style="margin-top: 32px;">
+      <div class="agent-badge">
+        <span class="agent-icon">PM</span>
+        WBS 데이터 관리
+      </div>
+      <div class="agent-badge">
+        <span class="agent-icon">FE</span>
+        시각화 개발
+      </div>
+      <div class="agent-badge">
+        <span class="agent-icon">UX</span>
+        인터페이스 설계
+      </div>
+      <div class="agent-badge">
+        <span class="agent-icon">QA</span>
+        데이터 검증
+      </div>
+      <div class="agent-badge">
+        <span class="agent-icon">PUB</span>
+        퍼블리싱
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="grid-2" style="margin-top: 40px;">
+    <div class="card feature-card reveal reveal-delay-1">
+      <div class="feature-num">01</div>
+      <h3>텍스트 기반 데이터 관리</h3>
+      <p>WBS 데이터를 JSON 형식으로 관리하며, Git을 통해 모든 변경 이력이 자동으로 추적됩니다. 날짜별 스냅샷으로 임의 시점의 프로젝트 상태를 즉시 확인할 수 있습니다.</p>
+    </div>
+    <div class="card feature-card reveal reveal-delay-2">
+      <div class="feature-num">02</div>
+      <h3>자연어 기반 데이터 조작</h3>
+      <p>"태스크를 분리해줘", "상태를 완료로 변경해줘" 등 자연어 명령으로 WBS 데이터를 수정합니다. AI Agent가 사전 정의된 규칙(부모-자식 구조, 공수 자동 산정 등)을 준수합니다.</p>
+    </div>
+    <div class="card feature-card reveal reveal-delay-3">
+      <div class="feature-num">03</div>
+      <h3>실시간 시각화</h3>
+      <p>데이터 변경 즉시 대시보드, 간트 차트, KPI 카드가 실시간으로 갱신됩니다. SSE(Server-Sent Events) 기반으로 새로고침 없이 최신 데이터가 반영됩니다.</p>
+    </div>
+    <div class="card feature-card reveal reveal-delay-4">
+      <div class="feature-num">04</div>
+      <h3>저비용 + 외부 시스템 연동</h3>
+      <p>Jira 등 SaaS 라이선스 비용 없이 AI API 비용만으로 운영됩니다. WBS 변경 시 Google Sheets에 자동 업로드되며, 월별 시트 생성과 서식 적용까지 자동화되어 별도 보고서 작업이 불필요합니다.</p>
+    </div>
+  </div>
+
+  <!-- Screenshot Gallery -->
+  <div class="gallery reveal">
+    <h3 style="font-size: 18px; font-weight: 700; color: var(--navy-900); margin-bottom: 16px;">실제 운영 화면</h3>
+    <div class="gallery-tabs">
+      <button class="gallery-tab active" data-gallery="db">데이터베이스 뷰</button>
+      <button class="gallery-tab" data-gallery="gantt">간트 차트</button>
+      <button class="gallery-tab" data-gallery="dash">대시보드</button>
+    </div>
+    <div class="gallery-image active" id="gallery-db">
+      <img src="screenshots/wbs-database-view.png" alt="WBS 데이터베이스 뷰" loading="lazy">
+      <div class="gallery-caption">268개 태스크의 전체 현황을 테이블 형태로 조회. 도메인, 담당자, 상태별 필터링 및 정렬 지원.</div>
+    </div>
+    <div class="gallery-image" id="gallery-gantt">
+      <img src="screenshots/wbs-gantt-chart.png" alt="WBS 간트 차트" loading="lazy">
+      <div class="gallery-caption">일/주/월 단위 타임라인으로 태스크 일정을 시각화. 상태별 색상 구분, 오늘 날짜 기준선 표시.</div>
+    </div>
+    <div class="gallery-image" id="gallery-dash">
+      <img src="screenshots/wbs-dashboard.png" alt="WBS 대시보드" loading="lazy">
+      <div class="gallery-caption">진척률 추이, 상태 분포, 담당자별 공수, 번다운 차트 등 KPI를 자동 집계하여 시각화.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============================================ -->
+<!-- SECTION 5: Impact -->
+<!-- ============================================ -->
+<section id="impact" class="section">
+  <span class="section-label">Impact</span>
+  <h2 class="section-title reveal">정량적 성과</h2>
+  <p class="section-desc reveal">기존 프로세스와의 비교를 통해 AI Agentic 프로세스 전환의 실질적 효과를 정리합니다.</p>
+
+  <!-- Comparison Table -->
+  <div class="reveal" style="margin-top: 40px; overflow-x: auto;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th style="width: 28%;">항목</th>
+          <th style="width: 36%;">Before (Jira / Excel)</th>
+          <th style="width: 36%;">After (AI Agentic)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>도구 라이선스 비용</td>
+          <td>인당 월 $7.75+ (Jira Standard 기준)</td>
+          <td>AI API 비용만 발생 <span class="improve-badge">저비용</span></td>
+        </tr>
+        <tr>
+          <td>WBS 현행화 소요</td>
+          <td>일 30분 이상 (수동 수집·입력)</td>
+          <td>자연어 명령 1~2분 <span class="improve-badge">-93%</span></td>
+        </tr>
+        <tr>
+          <td>데이터 신선도</td>
+          <td>최소 1일 지연 (갱신 주기 의존)</td>
+          <td>실시간 반영 (SSE 기반)</td>
+        </tr>
+        <tr>
+          <td>보고서 생성</td>
+          <td>별도 가공·시각화 수작업</td>
+          <td>대시보드 자동 생성 + Sheets 연동</td>
+        </tr>
+        <tr>
+          <td>변경 이력 추적</td>
+          <td>불가 또는 수동 버전 관리</td>
+          <td>Git + 날짜별 스냅샷 완전 추적</td>
+        </tr>
+        <tr>
+          <td>데이터 일관성</td>
+          <td>Excel/Jira/메일 분산</td>
+          <td>단일 JSON 소스 + 자동 동기화</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Impact Numbers -->
+  <div class="grid-4" style="margin-top: 48px;">
+    <div class="card impact-card reveal reveal-delay-1">
+      <div class="impact-number" data-target="268">0</div>
+      <div class="impact-unit">개</div>
+      <div class="impact-label">관리 중인 WBS 태스크</div>
+    </div>
+    <div class="card impact-card reveal reveal-delay-2">
+      <div class="impact-number" data-target="12">0</div>
+      <div class="impact-unit">명</div>
+      <div class="impact-label">프로젝트 팀원</div>
+    </div>
+    <div class="card impact-card reveal reveal-delay-3">
+      <div class="impact-number" data-target="11">0</div>
+      <div class="impact-unit">개</div>
+      <div class="impact-label">날짜별 데이터 스냅샷</div>
+    </div>
+    <div class="card impact-card reveal reveal-delay-4">
+      <div class="impact-number" data-target="5">0</div>
+      <div class="impact-unit">개</div>
+      <div class="impact-label">전문 AI 에이전트 역할</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!-- SECTION 6: Insight -->
+<!-- ============================================ -->
+<section id="insight" class="insight-block">
+  <div class="insight-inner">
+    <span class="section-label" style="color: var(--blue-500);">Insight</span>
+    <div class="insight-quote reveal">
+      AI 시대에 도구를 만드는 진입장벽은 빠르게 낮아지고 있습니다.<br>
+      그러나 <em>어떤 문제를 풀어야 하는지 정의하고, 해결 경로를 설계하며, 이를 반복 가능한 프로세스로 안착시키는 역량</em>의 가치는 오히려 높아지고 있습니다.
+    </div>
+
+    <div class="expansion-cards">
+      <div class="expansion-card reveal reveal-delay-1">
+        <h3>반복 가능한 문제 해결 사이클</h3>
+        <p>이번 사례는 단일 프로젝트의 도구 전환이 아니라, 문제 인식 → 탐색 → 해결 → 개선의 구조적 사이클이 작동한 결과입니다. 이 사이클은 다른 영역에도 동일하게 적용 가능합니다.</p>
+      </div>
+      <div class="expansion-card reveal reveal-delay-2">
+        <h3>타 프로젝트 적용 가능성</h3>
+        <p>현재 구축된 멀티에이전트 구조와 데이터 파이프라인은 프로젝트의 규모와 도메인에 관계없이 확장 적용이 가능합니다. WBS 외에도 이슈 트래킹, 리소스 관리 등으로 확대할 수 있습니다.</p>
+      </div>
+      <div class="expansion-card reveal reveal-delay-3">
+        <h3>주도적 기술 내재화</h3>
+        <p>외부 SaaS 의존도를 낮추고 자체적으로 프로세스를 설계·운영함으로써, 조직의 기술 역량과 독립성을 동시에 확보할 수 있는 기반을 마련했습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>AI Agentic 프로세스 도입 성과 보고 &middot; 2026. 03. 28 &middot; 안준헌</p>
+</footer>
+
+<!-- ===== JavaScript ===== -->
+<script>
+// Tab Navigation: Active state
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => link.classList.remove('active'));
+      const id = entry.target.id;
+      const activeLink = document.querySelector(`.nav-link[href="#${id}"]`);
+      if (activeLink) activeLink.classList.add('active');
+    }
+  });
+}, { threshold: 0.2, rootMargin: '-56px 0px 0px 0px' });
+
+sections.forEach(section => navObserver.observe(section));
+
+// Reveal animation
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// Counter animation
+function animateCounter(el, target) {
+  const duration = 1200;
+  let start = null;
+  const step = (ts) => {
+    if (!start) start = ts;
+    const progress = Math.min((ts - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target);
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  };
+  requestAnimationFrame(step);
+}
+
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const target = parseInt(entry.target.dataset.target, 10);
+      animateCounter(entry.target, target);
+      counterObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.impact-number[data-target]').forEach(el => {
+  counterObserver.observe(el);
+});
+
+// Gallery tabs
+document.querySelectorAll('.gallery-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.gallery-image').forEach(img => img.classList.remove('active'));
+    tab.classList.add('active');
+    const target = tab.dataset.gallery;
+    document.getElementById(`gallery-${target}`).classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>
