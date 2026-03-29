@@ -1608,26 +1608,27 @@ body {
   <!-- Agent team grid -->
   <div class="reveal" style="margin-top:40px;">
     <h3 class="sub-title" style="margin-top:0;">에이전트 팀 구성</h3>
-    <div class="agent-grid">
-      <div class="agent-badge pm">
-        <span class="agent-icon">PM</span>
-        WBS 데이터 관리
+    <div class="grid-2" style="gap:32px;">
+      <div>
+        <p style="font-size:12px;font-weight:700;letter-spacing:1px;color:var(--blue-600);margin-bottom:12px;">WBS 프로젝트 관리</p>
+        <p style="font-size:13px;color:var(--navy-600);margin-bottom:16px;line-height:1.6;">자연어 명령으로 WBS 데이터를 관리하고, 시각화·보고서·외부 시스템 동기화까지 자동 처리하는 5인 에이전트 팀</p>
+        <div class="agent-grid" style="grid-template-columns:repeat(5,1fr);">
+          <div class="agent-badge pm"><span class="agent-icon">PM</span>데이터 관리</div>
+          <div class="agent-badge pm"><span class="agent-icon">FE</span>시각화 개발</div>
+          <div class="agent-badge pm"><span class="agent-icon">UX</span>인터페이스</div>
+          <div class="agent-badge pm"><span class="agent-icon">QA</span>데이터 검증</div>
+          <div class="agent-badge pm"><span class="agent-icon">PUB</span>퍼블리싱</div>
+        </div>
       </div>
-      <div class="agent-badge pm">
-        <span class="agent-icon">FE</span>
-        시각화 개발
-      </div>
-      <div class="agent-badge pm">
-        <span class="agent-icon">UX</span>
-        인터페이스 설계
-      </div>
-      <div class="agent-badge pm">
-        <span class="agent-icon">QA</span>
-        데이터 검증
-      </div>
-      <div class="agent-badge pm">
-        <span class="agent-icon">PUB</span>
-        퍼블리싱
+      <div>
+        <p style="font-size:12px;font-weight:700;letter-spacing:1px;color:var(--gold);margin-bottom:12px;">DB 설계 자동화</p>
+        <p style="font-size:13px;color:var(--navy-600);margin-bottom:16px;line-height:1.6;">JSON 스펙 기반으로 설계 협의부터 DDL·마이그레이션·ERD 생성까지 처리하는 설계 특화 에이전트 팀</p>
+        <div class="agent-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="agent-badge db"><span class="agent-icon">Architect</span>스키마 설계</div>
+          <div class="agent-badge db"><span class="agent-icon">Dev</span>DDL·마이그레이션</div>
+          <div class="agent-badge db"><span class="agent-icon">Analyzer</span>일관성 검증</div>
+          <div class="agent-badge db"><span class="agent-icon">Reviewer</span>설계 리뷰</div>
+        </div>
       </div>
     </div>
   </div>
